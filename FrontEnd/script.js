@@ -1,14 +1,23 @@
-let works = [];
+// VARIABLES GLOBALES
+let works = []; // Tous les travaux récupérés depuis l'API (rempli par fetchWorks)
 const gallery = document.querySelector(".gallery");
 const portfolio = document.getElementById("portfolio");
 
-// AFFICHE TOUS LES TRAVAUX
-async function displayWorks() {
+// RÉCUPÈRE LES TRAVAUX DEPUIS L'API PUIS LES AFFICHE
+async function fetchWorks() {
   const response = await fetch("http://localhost:5678/api/works");
   works = await response.json();
-  console.log(works);
 
-  works.forEach((work) => {
+  displayWorks(works);
+}
+
+// AFFICHE DANS LA GALERIE LA LISTE DE TRAVAUX REÇUE EN PARAMÈTRE
+function displayWorks(worksList) {
+  // Vide la galerie pour ne pas cumuler les anciens travaux
+  gallery.innerHTML = "";
+
+  worksList.forEach((work) => {
+    // Crée la structure de chaque figure
     const figure = document.createElement("figure");
     const img = document.createElement("img");
     const figcaption = document.createElement("figcaption");
@@ -17,61 +26,62 @@ async function displayWorks() {
     img.alt = work.title;
     figcaption.innerText = work.title;
 
-    gallery.appendChild(figure);
+    // Assemble la figure, puis l'ajoute à la galerie
     figure.append(img, figcaption);
+    gallery.appendChild(figure);
   });
 }
 
-displayWorks();
-
-// CRÉE LES 4 BUTTONS
-const nav = document.createElement("nav");
-nav.classList.add("filters-nav");
-
-// AFFICHE OU ENLEVE LA SELECTION DU BUTTON
+// DÉPLACE LA CLASSE "filters-selected" SUR LE BOUTON CLIQUÉ
 function selectButton(button) {
   const filtersSelected = document.querySelector(".filters-selected");
   filtersSelected.classList.remove("filters-selected");
   button.classList.add("filters-selected");
 }
 
-//
+// RÉCUPÈRE LES CATÉGORIES DEPUIS L'API ET CRÉE LE MENU DE FILTRES
 async function createCategories() {
   const response = await fetch("http://localhost:5678/api/categories");
   const categories = await response.json();
-  console.log(categories);
 
-  // BUTTONS "TOUS"
-  const allBtn = document.createElement("button");
-  allBtn.classList.add("filters-button", "filters-selected");
-  allBtn.innerText = "Tous";
-  nav.append(allBtn);
+  // Conteneur du menu de filtres
+  const nav = document.createElement("nav");
+  nav.classList.add("filters-nav");
 
-  allBtn.addEventListener("click", () => {
-    selectButton(allBtn);
+  // Bouton "Tous" : sélectionné par défaut, réaffiche tous les travaux
+  const tousButton = document.createElement("button");
+  tousButton.classList.add("filters-button", "filters-selected");
+  tousButton.innerText = "Tous";
+
+  tousButton.addEventListener("click", () => {
+    selectButton(tousButton);
+    displayWorks(works);
   });
 
-  // BUTTONS DE L'API
+  nav.append(tousButton);
+
+  // Un bouton par catégorie de l'API
   categories.forEach((category) => {
     const filtersButton = document.createElement("button");
     filtersButton.classList.add("filters-button");
     filtersButton.innerText = category.name;
-    nav.append(filtersButton);
-    console.log(category);
 
+    // Au clic : n'affiche que les travaux de cette catégorie
     filtersButton.addEventListener("click", () => {
       selectButton(filtersButton);
 
-      // ADD A COMMENT
-      const filteredWorks = works.filter((work) => {
-        return work.categoryId === category.id;
-      });
+      const filteredWorks = works.filter((work) => work.categoryId === category.id);
 
-      console.log(filteredWorks);
+      displayWorks(filteredWorks);
     });
+
+    nav.append(filtersButton);
   });
 
+  // Insère le menu juste avant la galerie, dans la section #portfolio
   portfolio.insertBefore(nav, gallery);
 }
 
+// LANCEMENT
+fetchWorks();
 createCategories();
