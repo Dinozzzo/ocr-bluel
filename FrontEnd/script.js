@@ -1,10 +1,11 @@
+let works = [];
 const gallery = document.querySelector(".gallery");
 const portfolio = document.getElementById("portfolio");
 
 // AFFICHE TOUS LES TRAVAUX
 async function displayWorks() {
   const response = await fetch("http://localhost:5678/api/works");
-  const works = await response.json();
+  works = await response.json();
   console.log(works);
 
   works.forEach((work) => {
@@ -56,9 +57,17 @@ async function createCategories() {
     filtersButton.classList.add("filters-button");
     filtersButton.innerText = category.name;
     nav.append(filtersButton);
+    console.log(category);
 
     filtersButton.addEventListener("click", () => {
       selectButton(filtersButton);
+
+      // ADD A COMMENT
+      const filteredWorks = works.filter((work) => {
+        return work.categoryId === category.id;
+      });
+
+      console.log(filteredWorks);
     });
   });
 
