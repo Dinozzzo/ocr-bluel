@@ -1,11 +1,20 @@
+// VARIABLES GLOBALES
+const container = document.getElementById("login"); // Section qui contient le formulaire
 const form = document.getElementById("login-form");
-const errorMsg = document.querySelector("#error");
-const emailInput = document.querySelector("#email");
-const passwordInput = document.querySelector("#password");
+const errorMsg = document.createElement("p"); // Paragraphe du message d'erreur, créé en JS
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
 
-// RÉCUPÈRE LE MAIL ET MOT DE PASSE SAISIS
+// Message d'erreur ajouté vide dès le chargement : sa place est réservée (min-height), la page ne bouge pas
+errorMsg.classList.add("error");
+container.appendChild(errorMsg);
+
+// ENVOIE L'E-MAIL ET LE MOT DE PASSE À L'API À LA SOUMISSION DU FORMULAIRE
 form.addEventListener("submit", async (event) => {
+  // Empêche le rechargement de la page par défaut du formulaire
   event.preventDefault();
+
+  // Récupère les valeurs saisies (trim retire les espaces autour de l'e-mail)
   const email = emailInput.value.trim();
   const password = passwordInput.value;
 
@@ -14,12 +23,15 @@ form.addEventListener("submit", async (event) => {
   passwordInput.classList.remove("input-error");
 
   try {
+    // Requête POST : les identifiants sont envoyés en JSON dans le body
     const response = await fetch("http://localhost:5678/api/users/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" } /* Sans ce header, le serveur ne sait pas comment lire ton body */,
+      // Sans ce header, le serveur ne sait pas comment lire ton body
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
 
+    // Identifiants incorrects (404 utilisateur inconnu, 401 mauvais mot de passe)
     if (!response.ok) {
       errorMsg.textContent = "Erreur dans l'identifiant ou le mot de passe";
       emailInput.classList.add("input-error");
@@ -27,10 +39,12 @@ form.addEventListener("submit", async (event) => {
       return;
     }
 
+    // Connexion réussie : stocke le token puis redirige vers l'accueil
     const data = await response.json();
     window.localStorage.setItem("token", data.token);
     window.location.href = "index.html";
   } catch (error) {
+    // fetch n'échoue ici que si le serveur est injoignable (back-end éteint, réseau…)
     errorMsg.textContent = "Impossible de contacter le serveur";
   }
 });
