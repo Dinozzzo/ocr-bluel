@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="stylesheet" href="./assets/style.css" />
     <script src="gallery.js" defer></script>
-    <script src="authentification.js" defer></script>
+    <script src="authentificator.js" defer></script>
+    <script src="modal.js" defer></script>
   </head>
 
   <body>
@@ -70,5 +71,25 @@
         </ul>
       </nav>
     </footer>
+
+    <!-- MODALE : une seule dans le code, ouverte/fermée en JS (showModal / close) -->
+    <!-- aria-labelledby : le titre de la modale sert de nom pour les lecteurs d'écran -->
+    <dialog class="modal" aria-labelledby="modal-title">
+      <!-- Conteneur blanc : le dialog n'a pas de padding, un clic dans la zone hors de ce conteneur = clic sur le fond -->
+      <div class="modal-wrapper">
+        <!-- Croix commune aux deux vues ; aria-label car le bouton n'a pas de texte, seulement une icône -->
+        <button type="button" class="modal-close" aria-label="Fermer la modale">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <!-- VUE 1 : GALERIE PHOTO -->
+        <div class="modal-view modal-view-gallery">
+          <h2 id="modal-title">Galerie photo</h2>
+          <!-- Miniatures ajoutées en JS à partir des travaux -->
+          <div class="modal-gallery"></div>
+          <button type="button" class="modal-button">Ajouter une photo</button>
+        </div>
+      </div>
+    </dialog>
   </body>
 </html>
