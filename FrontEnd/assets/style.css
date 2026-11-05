@@ -447,7 +447,7 @@ footer li {
 
 .modal-wrapper {
   position: relative; /* Repère pour placer la croix en absolu */
-  padding: 60px 105px 45px;
+  padding: 60px 80px 45px;
 }
 
 .modal-close {
