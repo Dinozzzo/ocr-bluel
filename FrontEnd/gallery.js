@@ -84,4 +84,8 @@ async function createCategories() {
 
 // LANCEMENT
 fetchWorks();
-createCategories();
+
+// Filtres affichés seulement si l'utilisateur n'est pas connecté (pas de token)
+if (!window.localStorage.getItem("token")) {
+  createCategories();
+}

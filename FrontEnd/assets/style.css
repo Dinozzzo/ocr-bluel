@@ -173,7 +173,6 @@ h1 > span {
   letter-spacing: 0.1em;
   font-weight: 400;
   text-transform: uppercase;
-  padding-top: px;
 }
 
 h2 {
@@ -231,7 +230,6 @@ nav li.active {
 
 #portfolio h2 {
   text-align: center;
-  margin-bottom: 1em;
 }
 
 .gallery {
@@ -361,6 +359,49 @@ footer nav ul {
 }
 
 footer li {
+  cursor: pointer;
+}
+
+/* BANDEAU MODE ÉDITION (affiché une fois connecté) */
+.editor-header {
+  /* Même astuce que le footer : sort du max-width du body pour prendre toute la largeur */
+  margin: 0 calc(50% - 50vw);
+  height: 59px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Espace entre l'icône et le texte */
+  background-color: black;
+  color: white;
+  font-size: 16px;
+}
+
+/* TITRE "MES PROJETS" + BOUTON "modifier" */
+/* Grille à 3 colonnes : 2 colonnes égales (1fr) autour du titre, il reste donc pile au centre.
+   Le bouton "modifier" va dans la 3e colonne, sans décaler le titre */
+.portfolio-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 30px;
+  /* Espace sous le titre (connecté, il n'y a plus les filtres pour faire l'espace) */
+  margin-bottom: 50px;
+}
+
+.portfolio-header h2 {
+  grid-column: 2;
+}
+
+.edit-button {
+  justify-self: start; /* Collé au titre, pas étiré sur toute la colonne */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espace entre l'icône et le texte */
+  background: none;
+  border: none;
+  font-family: "Work Sans";
+  font-size: 14px;
+  color: black;
   cursor: pointer;
 }
 
