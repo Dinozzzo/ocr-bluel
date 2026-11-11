@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="./assets/style.css" />
     <script src="login.js" defer></script>
   </head>
+
   <body class="login-page">
     <header>
       <a href="index.html">
@@ -35,9 +36,9 @@
 
         <form action="#" method="post" id="login-form">
           <label for="email">E-mail</label>
-          <input type="email" name="email" id="email" />
+          <input type="email" name="email" id="email" autocomplete="username" />
           <label for="password">Mot de passe</label>
-          <input type="password" name="password" id="password" />
+          <input type="password" name="password" id="password" autocomplete="current-password" />
           <input type="submit" value="Se connecter" />
         </form>
 

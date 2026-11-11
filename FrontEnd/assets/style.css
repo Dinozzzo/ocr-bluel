@@ -429,7 +429,8 @@ footer li {
   color: white;
 }
 
-/* MODALE */
+/* ==================== MODALE ==================== */
+
 .modal {
   /* Le dialog est centré par le navigateur avec showModal() ; on enlève son style par défaut */
   width: 630px;
@@ -446,24 +447,24 @@ footer li {
 }
 
 .modal-wrapper {
-  position: relative; /* Repère pour placer la croix en absolu */
+  position: relative; /* Repère pour placer la croix et la flèche en absolu */
   padding: 60px 80px 45px;
-}
-
-.modal-close {
-  position: absolute;
-  top: 26px;
-  right: 30px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
+  /* Les deux vues sont superposées dans la même case de grille :
+     la modale prend la hauteur de la plus grande, donc garde la même taille sur les deux vues */
+  display: grid;
 }
 
 .modal-view {
+  grid-area: 1 / 1; /* Même case pour les deux vues : elles se superposent */
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* Vue cachée : invisible et non cliquable, mais garde sa place
+   (avec display: none, elle ne compterait plus dans la hauteur de la modale) */
+.modal-view[hidden] {
+  visibility: hidden;
 }
 
 /* Écrase le style global des h2 (Syne vert) */
@@ -475,12 +476,52 @@ footer li {
   margin-bottom: 50px;
 }
 
+/* Croix (fermer) et flèche (retour) : noires, sans fond, en haut de la modale */
+.modal-close,
+.modal-back {
+  position: absolute;
+  top: 26px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-close {
+  right: 30px;
+  font-size: 24px;
+}
+
+.modal-back {
+  left: 30px;
+  font-size: 21px;
+}
+
+/* Gros bouton arrondi en bas des deux vues ("Ajouter une photo" et "Valider") */
+.modal-button,
+.add-submit {
+  width: 237px;
+  height: 36px;
+  font-family: "Syne";
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+  background-color: #1d6154;
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+}
+
+/* ---------- VUE 1 : GALERIE PHOTO ---------- */
+
 /* Miniatures : 5 colonnes */
 .modal-gallery {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 30px 10px; /* lignes / colonnes */
+  /* Prend tout l'espace libre : le trait et le bouton restent en bas de la modale */
+  flex-grow: 1;
+  align-content: start; /* Les miniatures restent groupées en haut */
   /* Trait gris sous les miniatures */
   padding-bottom: 45px;
   border-bottom: 1px solid #b3b3b3;
@@ -516,16 +557,139 @@ footer li {
   cursor: pointer;
 }
 
-/* Bouton vert "Ajouter une photo" (même style que le bouton du formulaire) */
-.modal-button {
-  width: 237px;
-  height: 36px;
-  font-family: "Syne";
-  font-weight: 700;
-  font-size: 14px;
-  color: white;
-  background-color: #1d6154;
+/* ---------- VUE 2 : AJOUT PHOTO ---------- */
+
+/* Formulaire en colonne, champs alignés à gauche sur toute la largeur */
+.add-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cadre bleu clair d'upload */
+.upload-zone {
+  position: relative; /* Repère pour placer les boutons de l'aperçu */
+  height: 169px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 30px;
+  background-color: #e8f1f6;
+  border-radius: 3px;
+}
+
+.upload-icon {
+  font-size: 68px;
+  color: #b9c5cc;
+}
+
+/* Aperçu de l'image choisie (affiché en JS) */
+.upload-preview {
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Boutons modifier / retirer en haut à droite de l'aperçu */
+.upload-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+/* display: flex écrase l'attribut hidden : on le remet */
+.upload-actions[hidden] {
+  display: none;
+}
+
+/* Icône noire sans fond */
+.upload-action {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  color: black;
   border: none;
-  border-radius: 60px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Input file caché visuellement mais toujours accessible au clavier et aux lecteurs d'écran */
+.upload-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* Le label joue le rôle du bouton "+ Ajouter photo" */
+.upload-label {
+  padding: 10px 33px;
+  font-family: "Work Sans";
+  font-weight: 500;
+  font-size: 14px;
+  color: #306685;
+  background-color: #cbd6dc;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+/* Contour visible quand on arrive sur le champ fichier au clavier (Tab) */
+.upload-input:focus-visible + .upload-label {
+  outline: 2px solid #306685;
+  outline-offset: 2px;
+}
+
+.upload-info {
+  font-size: 10px;
+  color: #444444;
+}
+
+.add-label {
+  margin-bottom: 10px;
+  font-family: "Work Sans";
+  font-weight: 500;
+  font-size: 14px;
+  color: #3d3d3d;
+}
+
+/* Champ titre et select : même style que les champs du login */
+.add-input {
+  height: 51px;
+  margin-bottom: 20px;
+  padding: 0 15px;
+  font-family: "Work Sans";
+  font-size: 14px;
+  background-color: white;
+  border: none;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+/* Message d'erreur (rempli en JS) + trait gris au-dessus du bouton */
+.add-error {
+  min-height: 1em;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #b3b3b3;
+  margin-bottom: 32px;
+  color: rgb(176, 0, 0);
+}
+
+/* Bouton "Valider" : gris tant que le formulaire n'est pas rempli */
+.add-submit {
+  align-self: center;
+  background-color: #a7a7a7;
+  cursor: default; /* Pas de main tant qu'il est gris */
+}
+
+/* Formulaire complet (classe ajoutée en JS) : le bouton passe au vert.
+   Doit rester APRÈS .add-submit pour l'emporter (même spécificité) */
+.add-submit-active {
+  background-color: #1d6154;
   cursor: pointer;
 }

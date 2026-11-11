@@ -1,7 +1,10 @@
-// VARIABLES GLOBALES
-let works = []; // Tous les travaux récupérés depuis l'API (rempli par fetchWorks)
+// ==================== VARIABLES GLOBALES ====================
+
+let works = []; // Tous les travaux récupérés depuis l'API (partagé avec modal.js)
 const gallery = document.querySelector(".gallery");
 const portfolio = document.getElementById("portfolio");
+
+// ==================== FONCTIONS ====================
 
 // RÉCUPÈRE LES TRAVAUX DEPUIS L'API PUIS LES AFFICHE
 async function fetchWorks() {
@@ -13,8 +16,7 @@ async function fetchWorks() {
 
 // AFFICHE DANS LA GALERIE LA LISTE DE TRAVAUX REÇUE EN PARAMÈTRE
 function displayWorks(worksList) {
-  // Vide la galerie pour ne pas cumuler les anciens travaux
-  gallery.innerHTML = "";
+  gallery.innerHTML = ""; // Évite les doublons
 
   worksList.forEach((work) => {
     // Crée la structure de chaque figure
@@ -26,7 +28,7 @@ function displayWorks(worksList) {
     img.alt = work.title;
     figcaption.innerText = work.title;
 
-    // Assemble la figure, puis l'ajoute à la galerie
+    // Assemblage
     figure.append(img, figcaption);
     gallery.appendChild(figure);
   });
@@ -82,7 +84,8 @@ async function createCategories() {
   portfolio.insertBefore(nav, gallery);
 }
 
-// LANCEMENT
+// ==================== LANCEMENT ====================
+
 fetchWorks();
 
 // Filtres affichés seulement si l'utilisateur n'est pas connecté (pas de token)

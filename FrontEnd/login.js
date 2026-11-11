@@ -1,4 +1,5 @@
-// VARIABLES GLOBALES
+// ==================== VARIABLES GLOBALES ====================
+
 const container = document.getElementById("login"); // Section qui contient le formulaire
 const form = document.getElementById("login-form");
 const errorMsg = document.createElement("p"); // Paragraphe du message d'erreur, créé en JS
@@ -9,10 +10,11 @@ const passwordInput = document.getElementById("password");
 errorMsg.classList.add("error");
 container.appendChild(errorMsg);
 
+// ==================== CONNEXION ====================
+
 // ENVOIE L'E-MAIL ET LE MOT DE PASSE À L'API À LA SOUMISSION DU FORMULAIRE
 form.addEventListener("submit", async (event) => {
-  // Empêche le rechargement de la page par défaut du formulaire
-  event.preventDefault();
+  event.preventDefault(); // Empêche le rechargement de la page
 
   // Récupère les valeurs saisies (trim retire les espaces autour de l'e-mail)
   const email = emailInput.value.trim();
@@ -23,11 +25,10 @@ form.addEventListener("submit", async (event) => {
   passwordInput.classList.remove("input-error");
 
   try {
-    // Requête POST : les identifiants sont envoyés en JSON dans le body
+    // Envoie les identifiants au serveur en JSON
     const response = await fetch("http://localhost:5678/api/users/login", {
       method: "POST",
-      // Sans ce header, le serveur ne sait pas comment lire ton body
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" }, // Indique au serveur que le body est du JSON
       body: JSON.stringify({ email, password }),
     });
 
@@ -44,7 +45,7 @@ form.addEventListener("submit", async (event) => {
     window.localStorage.setItem("token", data.token);
     window.location.href = "index.html";
   } catch (error) {
-    // fetch n'échoue ici que si le serveur est injoignable (back-end éteint, réseau…)
+    // Problème réseau (serveur injoignable)
     errorMsg.textContent = "Impossible de contacter le serveur";
   }
 });

@@ -54,9 +54,9 @@
         <p>Vous avez un projet ? Discutons-en !</p>
         <form action="#" method="post">
           <label for="name">Nom</label>
-          <input type="text" name="name" id="name" />
+          <input type="text" name="name" id="name" autocomplete="name" />
           <label for="email">Email</label>
-          <input type="email" name="email" id="email" />
+          <input type="email" name="email" id="email" autocomplete="email" />
           <label for="message">Message</label>
           <textarea name="message" id="message" cols="30" rows="10"></textarea>
           <input type="submit" value="Envoyer" />
@@ -88,6 +88,50 @@
           <!-- Miniatures ajoutées en JS à partir des travaux -->
           <div class="modal-gallery"></div>
           <button type="button" class="modal-button">Ajouter une photo</button>
+        </div>
+
+        <!-- VUE 2 : AJOUT PHOTO (cachée par défaut avec hidden, affichée en JS) -->
+        <div class="modal-view modal-view-add" hidden>
+          <!-- Flèche retour vers la vue galerie -->
+          <button type="button" class="modal-back" aria-label="Retour à la galerie">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+
+          <h2>Ajout photo</h2>
+
+          <form class="add-form">
+            <!-- Zone d'upload : le label sert de bouton pour ouvrir le sélecteur de fichiers -->
+            <div class="upload-zone">
+              <i class="fa-regular fa-image upload-icon"></i>
+              <!-- Aperçu de l'image choisie (rempli en JS) -->
+              <img class="upload-preview" src="" alt="Aperçu de la photo" hidden />
+              <!-- Boutons sur l'aperçu (affichés en JS quand une image est choisie) -->
+              <div class="upload-actions" hidden>
+                <!-- Modifier la photo -->
+                <label for="add-image" class="upload-action" title="Changer la photo">
+                  <i class="fa-solid fa-pen"></i>
+                </label>
+                <!-- Supprimer la photo -->
+                <button type="button" class="upload-action upload-remove" aria-label="Retirer la photo">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+              <input type="file" id="add-image" name="image" accept=".jpg, .png" class="upload-input" />
+              <label for="add-image" class="upload-label">+ Ajouter photo</label>
+              <p class="upload-info">jpg, png : 4mo max</p>
+            </div>
+
+            <label for="add-title" class="add-label">Titre</label>
+            <input type="text" id="add-title" name="title" class="add-input" autocomplete="off" />
+
+            <label for="add-category" class="add-label">Catégorie</label>
+            <select id="add-category" name="category" class="add-input"></select>
+
+            <!-- Message d'erreur si le formulaire est incomplet -->
+            <p class="add-error"></p>
+
+            <button type="submit" class="modal-send add-submit">Valider</button>
+          </form>
         </div>
       </div>
     </dialog>

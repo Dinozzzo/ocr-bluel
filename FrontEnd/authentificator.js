@@ -1,9 +1,13 @@
+// ==================== VARIABLES GLOBALES ====================
+
 const header = document.querySelector("header");
 
-// RÉCUPÈRE LE TOKEN STOCKÉ À LA CONNEXION (null si l'utilisateur n'est pas connecté)
+// Token stocké à la connexion (null si l'utilisateur n'est pas connecté), utilisé aussi par gallery.js et modal.js
 const token = window.localStorage.getItem("token");
 
-// UTILISATEUR CONNECTÉ : PASSE LE LIEN "login" EN "logout"
+// ==================== MODE ÉDITION ====================
+
+// UTILISATEUR CONNECTÉ : AFFICHE LE MODE ÉDITION ET PASSE LE LIEN "login" EN "logout"
 if (token) {
   const navLogin = document.getElementById("nav-login");
   navLogin.textContent = "logout";
@@ -19,7 +23,7 @@ if (token) {
   editorHeader.append(editorIcon, "Mode édition");
   document.body.insertBefore(editorHeader, header);
 
-  // Bouton "modifier" ajouté à droite du titre "Mes Projets"
+  // Bouton "modifier" ajouté à droite du titre "Mes Projets" (ouvre la modale, voir modal.js)
   const portfolioHeader = document.querySelector(".portfolio-header");
   const editButton = document.createElement("button");
   editButton.classList.add("edit-button");
@@ -30,10 +34,11 @@ if (token) {
   editButton.append(editIcon, "modifier");
   portfolioHeader.appendChild(editButton);
 
-  // Au clic : supprime le token pour se déconnecter, puis recharge l'accueil
+  // ==================== DÉCONNEXION ====================
+
+  // CLIC SUR "logout" : supprime le token puis recharge l'accueil en mode visiteur
   navLogin.addEventListener("click", (event) => {
-    // Empêche le lien de suivre son href (login.html)
-    event.preventDefault();
+    event.preventDefault(); // Empêche le lien de suivre son href (login.html)
     window.localStorage.removeItem("token");
     window.location.reload();
   });
